@@ -12,8 +12,8 @@ build:
   stage: build
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    D_IMAGE_TAG: egon0/flarum-docker:$CI_COMMIT_REF_SLUG
-    D_LATEST_TAG: egon0/flarum-docker:latest
+    D_IMAGE_TAG: egon0/flarum-multiarch:$CI_COMMIT_REF_SLUG
+    D_LATEST_TAG: egon0/flarum-multiarch:latest
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
