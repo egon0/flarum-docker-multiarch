@@ -1,0 +1,24 @@
+image: egon0/docker-with-buildx-and-git
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker:dind
+
+build:
+  stage: build
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    D_IMAGE_TAG: egon0/flarum-docker:$CI_COMMIT_REF_SLUG
+    D_LATEST_TAG: egon0/flarum-docker:latest
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+    - git pull https://github.com/mondediefr/docker-flarum.git
+    - cd docker-flarum
+    - git apply ../chown-fix.patch
+    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
+    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE_TAG -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-(date +%Y-%m-%d) -t $D_IMAGE_TAG -t $D_LATEST_TAG -t  egon0/flarum-docker:$CI_COMMIT_REF_NAME-(date +%Y-%m-%d).
