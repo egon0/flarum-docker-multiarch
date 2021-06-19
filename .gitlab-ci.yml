@@ -17,7 +17,7 @@ build:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
-    - git pull https://github.com/mondediefr/docker-flarum.git
+    - git clone https://github.com/mondediefr/docker-flarum.git
     - cd docker-flarum
     - git apply ../chown-fix.patch
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
