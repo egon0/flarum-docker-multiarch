@@ -19,6 +19,5 @@ build:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
     - git clone https://github.com/mondediefr/docker-flarum.git
     - cd docker-flarum
-    - git apply ../chown-fix.patch
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE_TAG -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$(date +%Y-%m-%d) -t $D_IMAGE_TAG -t $D_LATEST_TAG -t egon0/flarum-multiarch:$CI_COMMIT_REF_NAME-$(date +%Y-%m-%d) .
